@@ -1,0 +1,36 @@
+html
+{
+    width: 100vw;
+    height: 100vh;
+}
+body
+{
+    width: 100%;
+    height:  100%;;
+    background-color:  rgb(27,27,27);
+    display: grid;
+    grid-template-areas:
+    '. contadores .'
+    '. center  .'
+    '. . .';
+}
+.contadores
+{
+    grid-area: contadores;
+}
+.forminicial
+{
+    grid-area: center;
+    background-color: antiquewhite;
+    border-radius: 15px;
+    border: solid 5px rgb(187, 175, 160);
+}
+.invisible 
+{
+    display: none;
+}
+.opcoes
+{
+    grid-area: center;
+    background-color: rgb(125, 125, 125);
+}

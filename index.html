@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Run</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="contadores" id="contadores"></div>
+    <div class="forminicial" id="forminicials">
+        <label for="nome">Nome:</label>
+        <input type="text" name="nome" id="nomeGet">
+        <br>
+        <label for="idade">Idade:</label>
+        <input type="number" name="dade" id="idadeGet">
+        <br>
+        <select name="generos" id="generos">
+            <option value="M">Masculino</option>
+            <option value="F">Feminino</option>
+            <option value="NB">Não Binario</option>
+        </select>
+        <button onclick="CriaPlayer()">Proximo</button>
+    </div>
+    <div class="forminicial invisible" id="formsecundario">
+        <div id="pontos">Distribua 10 pontos</div>
+        <label for="forca">Força:</label>
+        <input type="number" name="forca" id="forcas"><br>
+        <label for="intelecto">Intelecto:</label>
+        <input type="number" name="intelecto" id="intelectos"><br>
+        <label for="conhecimento">Conhecimento:</label>
+        <input type="number" name="conhecimento" id="conhecimentos"><br>
+        <label for="agilidade">Agilidade:</label>
+        <input type="number" name="agilidade" id="agilidades"><br>
+        <label for="presenca">Presenca:</label>
+        <input type="number" name="presenca" id="presencas">
+        <button onclick="atualizaPontos()">atualizar</button>
+    </div>
+    <div class="opcoes invisible" id="opcoesh">
+        <div class="opcao">dormir</div>
+        <div class="opcao">minerar</div>
+        <div class="opcao">plantar</div>
+        <div class="opcao">andar</div>
+    </div>
+</body>
+<script type="module" src="main.js"></script>
+</html>
