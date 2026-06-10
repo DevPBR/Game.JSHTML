@@ -2,7 +2,7 @@ import * as organizadores from "./Itens-Organizadores.js";
 import {Player, Pawn, Relations, Item, Inventario, Community} from "./Classes.js";
 import {geraPawns, geraComunidades, LiderComunidade } from "./Geradores.js";
 import { CriaPlayer, atualizaPontos, player } from "./Player.js";
-
+let conEstacoes = 0;
 export function calculosDiarios()
 {
     relacoes();
@@ -15,6 +15,35 @@ export function calculosDiarios()
 export function CalculosHorarios()
 {
     CalcInventarioComunidades();
+}
+export function CalculosMensais()
+{
+    CalculoEstacoes;
+}
+function CalculoEstacoes()
+{
+    conEstacoes++;
+    
+    if(conEstacoes > 12)
+    {
+        conEstacoes = 1;
+    }
+    if(conEstacoes <= 4)
+    {
+        organizadores.world.estacao = "Primavera"
+    }
+    else if(conEstacoes > 4 && conEstacoes <= 7)
+    {
+        organizadores.world.estacao = "Verao";
+    }
+    else if(conEstacoes > 7 && conEstacoes <= 9)
+    {
+        organizadores.world.estacao = "Outono";
+    }
+    else if(conEstacoes > 9 && conEstacoes <= 12)
+    {
+        organizadores.world.estacao = "Inverno";
+    }
 }
 function CalcInventarioComunidades()
 {
@@ -286,7 +315,7 @@ function TerFilhos()
             if(mae.pawnIsPregnant === false && Math.random() < 0.015)
             {
                 mae.pawnIsPregnant = true;
-                setTimeout(criarFilho, 12000, mae, pai);
+                setTimeout(criarFilho, 120000, mae, pai);
             }
         })
     })

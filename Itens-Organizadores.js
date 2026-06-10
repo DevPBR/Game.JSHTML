@@ -1,9 +1,11 @@
 export const world = 
 {
     dayCount: 0,
+    meses: 0,
     minutos: 0,
     horas: 0,
     anos: 0,
+    estacao: "Primavera",
     comunidades: []
 }
 export const mobDropsFood = [

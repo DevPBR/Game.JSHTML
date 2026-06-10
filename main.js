@@ -2,7 +2,7 @@ import * as organizadores from "./Itens-Organizadores.js";
 import {Player, Pawn, Relations, Item, Inventario, Community} from "./Classes.js";
 import { geraPawns, geraComunidades, LiderComunidade } from "./Geradores.js";
 import { CriaPlayer, atualizaPontos, player } from "./Player.js";
-import { calculosDiarios, CalculosHorarios } from "./WorldBrain.js";
+import { calculosDiarios, CalculosHorarios, CalculosMensais } from "./WorldBrain.js";
 
 let timeVel = 12;
 IniciaDados();
@@ -22,7 +22,6 @@ function Kill(name)
 function TimeManager()
 {                                                       //1/5
     organizadores.world.minutos += timeVel; //1 segundo da vida real = 2 minuto no jogo, logo 12 segundos = 1 dia, tempo razoavelmente bom
-
     if(organizadores.world.minutos >= 60) //a cada 60 minutos (30 segundos reais) aumenta 1 hora e retira 60 minutos
     {
         organizadores.world.horas += 1;
@@ -36,10 +35,16 @@ function TimeManager()
         calculosDiarios();
         console.log(organizadores.world.comunidades);
     }
-    if(organizadores.world.dayCount >= 365) //a cada 365 dias(72 horas reais) aumenta 1 ano e retira 365 dias
+    if(organizadores.world.dayCount >= 30)
+    {
+        organizadores.world.meses++;
+        organizadores.world.dayCount -= 30;
+        CalculosMensais();
+    }
+    if(organizadores.world.meses >= 12) //a cada 12 meses(72 horas reais) aumenta 1 ano e retira 12 meses
     {
         organizadores.world.anos++;
-        organizadores.world.dayCount -= 365;
+        organizadores.world.meses -= 12;
     }
 }
 
