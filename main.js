@@ -1,29 +1,39 @@
 import * as organizadores from "./Itens-Organizadores.js";
 import {Player, Pawn, Relations, Item, Inventario, Community} from "./Classes.js";
-import { calculaRiquezas, geraPawns, geraComunidades, LiderComunidade } from "./Geradores.js";
+import { geraPawns, geraComunidades, LiderComunidade } from "./Geradores.js";
 import { CriaPlayer, atualizaPontos, player } from "./Player.js";
-import * as WB from "./WorldBrain.js";
+import { calculosDiarios, CalculosHorarios } from "./WorldBrain.js";
 
+let timeVel = 12;
 IniciaDados();
 main();
-
+function Kill(name)
+{
+    let pessoa = null;
+    organizadores.world.comunidades.forEach(comunidade => {
+        pessoa = comunidade.pawns.filter(h => h.pawnName === name);
+        
+        pessoa.forEach(pawn => {
+            pawn.pawnLife -= 100;
+        })
+        console.log(pessoa);
+    })
+}
 function TimeManager()
 {                                                       //1/5
-    organizadores.world.minutos += 12; //1 segundo da vida real = 2 minuto no jogo, logo 12 minutos = 1 dia, tempo razoavelmente bom
+    organizadores.world.minutos += timeVel; //1 segundo da vida real = 2 minuto no jogo, logo 12 segundos = 1 dia, tempo razoavelmente bom
 
     if(organizadores.world.minutos >= 60) //a cada 60 minutos (30 segundos reais) aumenta 1 hora e retira 60 minutos
     {
         organizadores.world.horas += 1;
         organizadores.world.minutos -= 60;
-        console.log(organizadores.world.dayCount+"  "+organizadores.world.horas+":"+organizadores.world.minutos.toFixed(2))
-        WB.relacoes();
-        console.log(organizadores.world.pawns);
+        CalculosHorarios();
     }
     if(organizadores.world.horas >= 24) //a cada 24 horas (12 minutos reais) aumenta 1 dia e retira 24 horas
     {
         organizadores.world.dayCount++;
         organizadores.world.horas -= 24;
-        WB.calculosDiarios();
+        calculosDiarios();
         console.log(organizadores.world.comunidades);
     }
     if(organizadores.world.dayCount >= 365) //a cada 365 dias(72 horas reais) aumenta 1 ano e retira 365 dias
@@ -31,8 +41,6 @@ function TimeManager()
         organizadores.world.anos++;
         organizadores.world.dayCount -= 365;
     }
-
-   
 }
 
 function main() //função principal
@@ -45,6 +53,42 @@ function IniciaDados() //inicia os dados do jogo de primeira instancia e indepen
 {
     geraComunidades();
     geraPawns();
-    calculaRiquezas();
     LiderComunidade();
 }
+
+document.addEventListener("keydown", (event) => {
+
+    if(event.code === "NumpadDecimal")
+    {
+        if(timeVel === 12)
+        {
+            timeVel = 0;
+        }
+        else
+        {
+            timeVel = 12;
+        }
+    }
+});
+document.addEventListener("keydown", (event) => {
+
+    if(event.code === "Numpad1")
+    {
+        timeVel = 12;
+    }
+});
+document.addEventListener("keydown", (event) => {
+
+    if(event.code === "Numpad2")
+    {
+        timeVel = 24;
+    }
+});
+document.addEventListener("keydown", (event) => {
+
+    if(event.code === "Numpad3")
+    {
+        timeVel = 36;
+    }
+});
+window.Kill = Kill;

@@ -23,7 +23,7 @@ export class Relations //classe que define as relações dos pawns
 }
 export class Pawn //classe que define os pawn (pessoas)
 {
-    constructor(nome, idade, trabalho, dinheiro, relacao, genero, conjuge, pai, mae, sexualidade, filhos)
+    constructor(nome, idade, trabalho, dinheiro, relacao, genero, conjuge, pai, mae, sexualidade, comunidade)
     {
         this.pawnName = nome, //carrega o nome do pawn (pessoa)
         this.pawnAge = idade, //carrega a idade do pawn
@@ -35,7 +35,13 @@ export class Pawn //classe que define os pawn (pessoas)
         this.pawnDad = pai;
         this.pawnMom = mae;
         this.pawnSexuality = sexualidade;
-        this.pawnSons = filhos;
+        this.pawnSons = [];
+        this.pawnIsPregnant = false;
+        this.pawnComunidade = comunidade;
+        this.pawnAteYesterday = false;
+        this.pawnAteToday = false;
+        this.pawnLife = 100;
+        this.pawnIsDead = false;
     }
     AdicionarRelacao(pawn, modificacao)
     {
@@ -44,6 +50,7 @@ export class Pawn //classe que define os pawn (pessoas)
         if(relacaoExistente)
         {
             relacaoExistente.valorRelacao += modificacao;
+            relacaoExistente.valorRelacao = Math.max(-100, Math.min(100, relacaoExistente.valorRelacao));
         }
         else
         {
@@ -64,6 +71,9 @@ export class Inventario
     constructor()
     {
         this.invItens = [];
+        this.comida = [];
+        this.minerais = [];
+        this.recursos = [];
     }
     AdicionarItem(item, quantidade)
     {
@@ -79,7 +89,51 @@ export class Inventario
                 new Item(item, quantidade)
             );
         }
+    }
+    AdicionarComida(item, quantidade)
+    {
+        let itemExistente = this.comida.find(i => i.itemName === item);
 
+        if(itemExistente)
+        {
+            itemExistente.itemQuantidade += quantidade;
+        }
+        else
+        {
+            this.comida.push(
+                new Item(item, quantidade)
+            );
+        }   
+    }
+    AdicionarRecurso(item, quantidade)
+    {
+        let itemExistente = this.recursos.find(i => i.itemName === item);
+
+        if(itemExistente)
+        {
+            itemExistente.itemQuantidade += quantidade;
+        }
+        else
+        {
+            this.recursos.push(
+                new Item(item, quantidade)
+            );
+        }   
+    }
+    AdicionarMinerais(item, quantidade)
+    {
+        let itemExistente = this.minerais.find(i => i.itemName === item);
+
+        if(itemExistente)
+        {
+            itemExistente.itemQuantidade += quantidade;
+        }
+        else
+        {
+            this.minerais.push(
+                new Item(item, quantidade)
+            );
+        }   
     }
 }
 export class Community  //gere uma comunidade, usar new community depois para criar comunidades aleatórias :)
@@ -93,5 +147,7 @@ export class Community  //gere uma comunidade, usar new community depois para cr
         this.pawns = pawns, //carrega a lista de pessoas que moram na comunidade
         this.communityWealth = bens, //carrega o somatório de todas as riquesas da comunidade
         this.communityInventory = inventario //carrega o inventário da comunidade
+        this.communityDeadPawns = []; //carrega os mortos da comunidade, pawns que já antes existiram (investigar memory Dump)
+        this.doCommunityExists = true; //carrega o status da comunidade, se ela ainda existe
     }
 }

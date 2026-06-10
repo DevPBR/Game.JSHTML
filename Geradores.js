@@ -1,15 +1,6 @@
 import * as organizadores from "./Itens-Organizadores.js";
 import {Player, Pawn, Relations, Item, Inventario, Community} from "./Classes.js";
 
-export function calculaRiquezas() //calcula a riqueza da comunidade, depois via expandir calculando também com o inventário da mesma.
-{
-    organizadores.world.comunidades.forEach(comunidade => {
-        comunidade.communityWealth = 0;
-        comunidade.pawns.forEach(pawn => {
-            comunidade.communityWealth += pawn.pawnCash;
-        })
-    })
-}
 
 export function geraPawns()
 {
@@ -43,7 +34,7 @@ export function geraPawns()
                 }
             }
             comunidade.pawns.push(
-                new Pawn(nomea, Math.floor(Math.random() * 50) + 18, organizadores.trabalhos[Math.floor(Math.random() * organizadores.trabalhos.length)], Math.floor(Math.random() * 500), [], generoa, null, null, null, sexualidade, null)
+                new Pawn(nomea, Math.floor(Math.random() * 50) + 18, organizadores.trabalhos[Math.floor(Math.random() * organizadores.trabalhos.length)], Math.floor(Math.random() * 500), [], generoa,  null, null, null, sexualidade, comunidade)
             )
         }
     });
@@ -71,7 +62,7 @@ export function LiderComunidade() //checa todos os pawns e aqueles que tiverem o
 export function geraComunidades()
 {
     //gera comunidades
-    var numComunidades = Math.floor(Math.random() * 6) + 1;
+    var numComunidades = Math.floor(Math.random() * 0) + 1;
 
     for(let i = 0; i < numComunidades; i++)
     {

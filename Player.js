@@ -1,6 +1,6 @@
 import * as organizadores from "./Itens-Organizadores.js";
 import { Player, Pawn, Relations, Item, Inventario, Community } from "./Classes.js";
-import { calculaRiquezas, geraPawns, geraComunidades, LiderComunidade } from "./Geradores.js";
+import { geraPawns, geraComunidades, LiderComunidade } from "./Geradores.js";
 
 export let player = null;
 
