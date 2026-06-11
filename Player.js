@@ -23,6 +23,7 @@ export function atualizaPontos() //função que atualiza os pontos de atributos 
         player.intelecto = Number(intelecto);
         document.getElementById("formsecundario").remove();
         document.getElementById("opcoesh").classList.remove("invisible");
+        document.getElementById("opcoesh").classList.add("visible");
         console.log(player);
     }
     else

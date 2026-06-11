@@ -62,7 +62,7 @@ export function LiderComunidade() //checa todos os pawns e aqueles que tiverem o
 export function geraComunidades()
 {
     //gera comunidades
-    var numComunidades = Math.floor(Math.random() * 0) + 1;
+    var numComunidades = Math.floor(Math.random() * 2) + 1;
 
     for(let i = 0; i < numComunidades; i++)
     {

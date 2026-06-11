@@ -3,7 +3,8 @@ import {Player, Pawn, Relations, Item, Inventario, Community} from "./Classes.js
 import { geraPawns, geraComunidades, LiderComunidade } from "./Geradores.js";
 import { CriaPlayer, atualizaPontos, player } from "./Player.js";
 import { calculosDiarios, CalculosHorarios, CalculosMensais } from "./WorldBrain.js";
-
+import { calculosFinanceiros, calculaTabelaPreços, atualizaValores } from "./EconomiaGlobal.js";
+import * as UI from "./UI.js";
 let timeVel = 12;
 IniciaDados();
 main();
@@ -19,14 +20,22 @@ function Kill(name)
         console.log(pessoa);
     })
 }
+function atualizaContador()
+{
+    document.getElementById("contadores").innerHTML = organizadores.world.anos+"/"+organizadores.world.meses+"/"+organizadores.world.dayCount+"   "+organizadores.world.horas+":"+organizadores.world.minutos;
+}
 function TimeManager()
 {                                                       //1/5
     organizadores.world.minutos += timeVel; //1 segundo da vida real = 2 minuto no jogo, logo 12 segundos = 1 dia, tempo razoavelmente bom
+    atualizaContador();
+    atualizaValores();
     if(organizadores.world.minutos >= 60) //a cada 60 minutos (30 segundos reais) aumenta 1 hora e retira 60 minutos
     {
         organizadores.world.horas += 1;
         organizadores.world.minutos -= 60;
+        
         CalculosHorarios();
+        calculosFinanceiros();
     }
     if(organizadores.world.horas >= 24) //a cada 24 horas (12 minutos reais) aumenta 1 dia e retira 24 horas
     {
@@ -59,6 +68,7 @@ function IniciaDados() //inicia os dados do jogo de primeira instancia e indepen
     geraComunidades();
     geraPawns();
     LiderComunidade();
+    UI.atualizaInventario();
 }
 
 document.addEventListener("keydown", (event) => {

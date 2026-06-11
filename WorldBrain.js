@@ -2,7 +2,13 @@ import * as organizadores from "./Itens-Organizadores.js";
 import {Player, Pawn, Relations, Item, Inventario, Community} from "./Classes.js";
 import {geraPawns, geraComunidades, LiderComunidade } from "./Geradores.js";
 import { CriaPlayer, atualizaPontos, player } from "./Player.js";
+
 let conEstacoes = 0;
+let modificadorAgricultura = 0;
+let modificadorMineracao = 0;
+let modificadorCaca = 0;
+let modificadorPesca = 0;
+
 export function calculosDiarios()
 {
     relacoes();
@@ -31,61 +37,237 @@ function CalculoEstacoes()
     if(conEstacoes <= 4)
     {
         organizadores.world.estacao = "Primavera"
+        modificadorAgricultura = 1.5;
+        modificadorCaca = 1.25
+        modificadorPesca = 1.25;
+        modificadorMineracao = 1;
     }
     else if(conEstacoes > 4 && conEstacoes <= 7)
     {
         organizadores.world.estacao = "Verao";
+        modificadorAgricultura = 1
+        modificadorCaca = 1;
+        modificadorPesca = 1;
+        modificadorMineracao = .75;
     }
     else if(conEstacoes > 7 && conEstacoes <= 9)
     {
         organizadores.world.estacao = "Outono";
+        modificadorAgricultura = .5;
+        modificadorCaca = 1.5;
+        modificadorPesca = 1.5;
+        modificadorMineracao = 1.25;
     }
     else if(conEstacoes > 9 && conEstacoes <= 12)
     {
         organizadores.world.estacao = "Inverno";
+        modificadorAgricultura = 0;
+        modificadorCaca = .25;
+        modificadorPesca = .25;
+        modificadorMineracao = 1.5
     }
 }
 function CalcInventarioComunidades()
 {
     organizadores.world.comunidades.forEach(comunidade => (
         comunidade.pawns.forEach(pawn => {
-            let item = null;
-            let quantidade = Math.floor(Math.random() * 4) + 1;
+
+            let item;
+            let modpesca = 1;
+            let modafinal = 1;
+            let modfmfinal = 1;
+            let itemRaridade = null;
+            let itemescolhido = null;
+            let itemQualidade = organizadores.qualidadeItens[Math.floor(Math.random() * organizadores.qualidadeItens.length)];
+            let quantidade = Math.floor(Math.random() * 2) + 1;
+            let randomNum = Math.floor(Math.random() * 10) + 1;
+            let randQual = Math.floor(Math.random() * 9) + 1;
+
+            switch(comunidade.communitySpecialization)
+            {
+                case "Mineira":
+                    modfmfinal = modificadorMineracao + .25;
+                break;
+                case "Agricola":
+                    modafinal = modificadorAgricultura + .25;
+                break;
+                case "Pesqueira":
+                    modpesca = modificadorPesca + .25;
+                break;
+            }
+
+            if(randomNum > 9.75)
+            {
+                itemRaridade = organizadores.raridadeItens.find(s => s === "Impossivel");
+            }
+            else if(randomNum > 8.5 && randomNum <= 9.75)
+            {
+                itemRaridade = organizadores.raridadeItens.find(s => s === "Raro");
+            }
+            else if(randomNum > 7 && randomNum <= 8.5)
+            {
+                itemRaridade = organizadores.raridadeItens.find(s => s === "Incomum");
+            }
+            else if(randomNum > 5 && randomNum <= 7)
+            {
+                itemRaridade = organizadores.raridadeItens.find(s => s === "Comum");
+            }
+            else if(randomNum > 0 && randomNum <= 5)
+            {
+                itemRaridade = organizadores.raridadeItens.find(s => s === "Muito Comum");
+            }
+
             if(pawn.pawnWork == "Mineire")
             {
-                item = organizadores.todosMinerais[Math.floor(Math.random() * organizadores.todosMinerais.length)];
-                comunidade.communityInventory.AdicionarItem(item, quantidade);
-                comunidade.communityInventory.AdicionarMinerais(item, quantidade);
+               if(itemRaridade == "Impossivel")
+               {
+                    item = organizadores.mineraisLendarios[Math.floor(Math.random() * organizadores.mineraisLendarios.length)];
+               }
+               else if(itemRaridade == "Raro")
+               {
+                    item = organizadores.mineraisRaros[Math.floor(Math.random() * organizadores.mineraisRaros.length)];
+               }
+                else if(itemRaridade == "Incomum")
+               {
+                    item = organizadores.mineraisIncomuns[Math.floor(Math.random() * organizadores.mineraisIncomuns.length)];
+               }
+                else if(itemRaridade == "Comum" || itemRaridade == "Muito Comum")
+               {
+                    item = organizadores.mineraisComuns[Math.floor(Math.random() * organizadores.mineraisComuns.length)];
+               }
+               quantidade = quantidade * modfmfinal;
+               comunidade.communityInventory.AdicionarItem(item, quantidade, itemRaridade, itemQualidade);
+               comunidade.communityInventory.AdicionarMinerais(item, quantidade, itemRaridade, itemQualidade);
             }
             else if(pawn.pawnWork == "Pescadore")
             {
-                item = organizadores.todosPeixes[Math.floor(Math.random() * organizadores.todosPeixes.length)];
-                comunidade.communityInventory.AdicionarItem(item, quantidade);
-                comunidade.communityInventory.AdicionarComida(item, quantidade);
+                if(itemRaridade == "Impossivel")
+               {
+                    item = organizadores.peixesLendarios[Math.floor(Math.random() * organizadores.peixesLendarios.length)];
+               }
+               else if(itemRaridade == "Raro")
+               {
+                    item = organizadores.peixesRaros[Math.floor(Math.random() * organizadores.peixesRaros.length)];
+               }
+                else if(itemRaridade == "Incomum")
+               {
+                    item = organizadores.peixesIncomuns[Math.floor(Math.random() * organizadores.peixesIncomuns.length)];
+               }
+                else if(itemRaridade == "Comum" )
+               {
+                    item = organizadores.peixesNormais[Math.floor(Math.random() * organizadores.peixesNormais.length)];
+               }
+               else if(itemRaridade == "Muito Comum")
+               {
+                    item = organizadores.peixesMComuns[Math.floor(Math.random() * organizadores.peixesMComuns.length)];
+               }
+               quantidade = quantidade * modpesca;
+               comunidade.communityInventory.AdicionarItem(item, quantidade, itemRaridade, itemQualidade);
+               comunidade.communityInventory.AdicionarComida(item, quantidade, itemRaridade, itemQualidade);
             }
             else if(pawn.pawnWork == "Fazendeire")
             {
-                item = organizadores.plantas[Math.floor(Math.random() * organizadores.plantas.length)];
-                comunidade.communityInventory.AdicionarItem(item, quantidade);
-                comunidade.communityInventory.AdicionarComida(item, quantidade);
+                if(itemRaridade == "Impossivel")
+               {
+                    item = organizadores.plantasImpossiveis[Math.floor(Math.random() * organizadores.plantasImpossiveis.length)];
+               }
+               else if(itemRaridade == "Raro")
+               {
+                    item = organizadores.plantasRaras[Math.floor(Math.random() * organizadores.plantasRaras.length)];
+               }
+                else if(itemRaridade == "Incomum")
+               {
+                    item = organizadores.plantasIncomuns[Math.floor(Math.random() * organizadores.plantasIncomuns.length)];
+               }
+                else if(itemRaridade == "Comum" )
+               {
+                    item = organizadores.plantasComuns[Math.floor(Math.random() * organizadores.plantasComuns.length)];
+               }
+               else if(itemRaridade == "Muito Comum")
+               {
+                    item = organizadores.plantasMuitoComuns[Math.floor(Math.random() * organizadores.plantasMuitoComuns.length)];
+               } 
+               quantidade = quantidade * modafinal;
+               comunidade.communityInventory.AdicionarItem(item, quantidade, itemRaridade, itemQualidade);
+               comunidade.communityInventory.AdicionarComida(item, quantidade, itemRaridade, itemQualidade);
             }
             else if(pawn.pawnWork == "Guarde")
             {
-                item = organizadores.mobDrops[Math.floor(Math.random() * organizadores.mobDrops.length)];
-                comunidade.communityInventory.AdicionarItem(item, quantidade);
-                comunidade.communityInventory.AdicionarRecurso(item, quantidade);
+                if(itemRaridade == "Impossivel")
+               {
+                    item = organizadores.espoliosImpossiveis[Math.floor(Math.random() * organizadores.espoliosImpossiveis.length)];
+               }
+               else if(itemRaridade == "Raro")
+               {
+                    item = organizadores.espoliosRaros[Math.floor(Math.random() * organizadores.espoliosRaros.length)];
+               }
+                else if(itemRaridade == "Incomum")
+               {
+                    item = organizadores.espoliosIncomuns[Math.floor(Math.random() * organizadores.espoliosIncomuns.length)];
+               }
+                else if(itemRaridade == "Comum" )
+               {
+                    item = organizadores.espoliosComuns[Math.floor(Math.random() * organizadores.espoliosComuns.length)];
+               }
+               else if(itemRaridade == "Muito Comum")
+               {
+                    item = organizadores.espoliosMuitoComuns[Math.floor(Math.random() * organizadores.espoliosMuitoComuns.length)];
+               } 
+               quantidade = quantidade * modificadorCaca;
+               comunidade.communityInventory.AdicionarItem(item, quantidade, itemRaridade, itemQualidade);
+               comunidade.communityInventory.AdicionarRecurso(item, quantidade, itemRaridade, itemQualidade);
             }
             else if(pawn.pawnWork == "Cientiste")
             {
-                item = organizadores.pocoes[Math.floor(Math.random() * organizadores.pocoes.length)];
-                comunidade.communityInventory.AdicionarItem(item, quantidade);
-                comunidade.communityInventory.AdicionarRecurso(item, quantidade);
+                if(itemRaridade == "Impossivel")
+               {
+                    item = organizadores.pocoesImpossiveis[Math.floor(Math.random() * organizadores.pocoesImpossiveis.length)];
+               }
+               else if(itemRaridade == "Raro")
+               {
+                    item = organizadores.pocoesRaras[Math.floor(Math.random() * organizadores.pocoesRaras.length)];
+               }
+                else if(itemRaridade == "Incomum")
+               {
+                    item = organizadores.pocoesIncomuns[Math.floor(Math.random() * organizadores.pocoesIncomuns.length)];
+               }
+                else if(itemRaridade == "Comum" )
+               {
+                    item = organizadores.pocoesComuns[Math.floor(Math.random() * organizadores.pocoesComuns.length)];
+               }
+               else if(itemRaridade == "Muito Comum")
+               {
+                    item = organizadores.pocoesMuitoComuns[Math.floor(Math.random() * organizadores.pocoesMuitoComuns.length)];
+               } 
+
+               comunidade.communityInventory.AdicionarItem(item, quantidade, itemRaridade, itemQualidade);
+               comunidade.communityInventory.AdicionarRecurso(item, quantidade, itemRaridade, itemQualidade);
             }
             else if(pawn.pawnWork == "Ferreire")
             {
-                item = organizadores.equipamentosFerr[Math.floor(Math.random() * organizadores.equipamentosFerr.length)];
-                comunidade.communityInventory.AdicionarItem(item, quantidade);
-                comunidade.communityInventory.AdicionarRecurso(item, quantidade);
+                if(itemRaridade == "Impossivel")
+               {
+                    item = organizadores.ferreiroImpossiveis[Math.floor(Math.random() * organizadores.ferreiroImpossiveis.length)];
+               }
+               else if(itemRaridade == "Raro")
+               {
+                    item = organizadores.ferreiroRaros[Math.floor(Math.random() * organizadores.ferreiroRaros.length)];
+               }
+                else if(itemRaridade == "Incomum")
+               {
+                    item = organizadores.ferreiroIncomuns[Math.floor(Math.random() * organizadores.ferreiroIncomuns.length)];
+               }
+                else if(itemRaridade == "Comum" )
+               {
+                    item = organizadores.ferreiroComuns[Math.floor(Math.random() * organizadores.ferreiroComuns.length)];
+               }
+               else if(itemRaridade == "Muito Comum")
+               {
+                    item = organizadores.ferreiroMuitoComuns[Math.floor(Math.random() * organizadores.ferreiroMuitoComuns.length)];
+               } 
+
+               comunidade.communityInventory.AdicionarItem(item, quantidade, itemRaridade, itemQualidade);
+               comunidade.communityInventory.AdicionarRecurso(item, quantidade, itemRaridade, itemQualidade);
             }
         })
     ))

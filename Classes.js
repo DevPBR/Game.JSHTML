@@ -13,6 +13,28 @@ export class Player //Classe player, define as informações dadas pelos inputs 
         this.inventario = inventario;
     }
 }
+export class InventarioGlobal
+{
+    constructor()
+    {
+        this.Itens = [];
+    }
+    AdicionarItens(item, quantidade, valor)
+    {
+        let itemExistente = this.Itens.find(i => i.itemName === item.itemName);
+
+        if(itemExistente)
+        {
+            itemExistente.itemQuantidade += quantidade;
+        }
+        else
+        {
+            this.Itens.push(
+                new Item(item.itemName, quantidade, valor, item.itemRaridade, item.itemQualidade)
+            );
+        }
+    }
+}
 export class Relations //classe que define as relações dos pawns
 {
     constructor(pawnRelativo, modificador)
@@ -60,10 +82,13 @@ export class Pawn //classe que define os pawn (pessoas)
 }
 export class Item //classe que define um item, depois entra na array invItens da classe Inventario
 {
-    constructor(item, quantidade)
+    constructor(item, quantidade, valor, raridade, qualidade)
     {
         this.itemName = item //define o nome do item
         this.itemQuantidade = quantidade;
+        this.itemRaridade = raridade;
+        this.itemQualidade = qualidade;
+        this.itemValor = valor;
     }
 }
 export class Inventario
@@ -75,7 +100,7 @@ export class Inventario
         this.minerais = [];
         this.recursos = [];
     }
-    AdicionarItem(item, quantidade)
+    AdicionarItem(item, quantidade, raridade, qualidade)
     {
         let itemExistente = this.invItens.find(i => i.itemName === item);
 
@@ -86,11 +111,11 @@ export class Inventario
         else
         {
             this.invItens.push(
-                new Item(item, quantidade)
+                new Item(item, quantidade, 0, raridade, qualidade)
             );
         }
     }
-    AdicionarComida(item, quantidade)
+    AdicionarComida(item, quantidade, raridade, qualidade)
     {
         let itemExistente = this.comida.find(i => i.itemName === item);
 
@@ -101,11 +126,11 @@ export class Inventario
         else
         {
             this.comida.push(
-                new Item(item, quantidade)
+                new Item(item, quantidade, 0, raridade, qualidade)
             );
         }   
     }
-    AdicionarRecurso(item, quantidade)
+    AdicionarRecurso(item, quantidade, raridade, qualidade)
     {
         let itemExistente = this.recursos.find(i => i.itemName === item);
 
@@ -116,11 +141,11 @@ export class Inventario
         else
         {
             this.recursos.push(
-                new Item(item, quantidade)
+                new Item(item, quantidade, 0, raridade, qualidade)
             );
         }   
     }
-    AdicionarMinerais(item, quantidade)
+    AdicionarMinerais(item, quantidade, raridade, qualidade)
     {
         let itemExistente = this.minerais.find(i => i.itemName === item);
 
@@ -131,7 +156,7 @@ export class Inventario
         else
         {
             this.minerais.push(
-                new Item(item, quantidade)
+                new Item(item, quantidade, 0, raridade, qualidade)
             );
         }   
     }
